@@ -1,5 +1,5 @@
 const request = require("supertest");
-const { exepct, expect } = require("chai");
+const { expect } = require("chai");
 
 describe("Login", () => {
   describe("POST /Login", () => {
