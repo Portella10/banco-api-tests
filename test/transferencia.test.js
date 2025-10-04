@@ -5,9 +5,13 @@ const { obterToken } = require("../helpers/autenticacao");
 
 describe("Transferencia", () => {
   describe("POST /transferencia", () => {
-    it("Deve retornar status 200 após colocar um valor igual ou maior que R$10,00", async () => {
-      const token = await obterToken("julio.lima", "123456");
+    let token;
 
+    beforeEach(async () => {
+      token = await obterToken("julio.lima", "123456");
+    });
+
+    it("Deve retornar status 200 após colocar um valor igual ou maior que R$10,00", async () => {
       const response = await request(process.env.BASE_URL)
         .post("/transferencias")
         .set("Content-Type", "application/json")
@@ -22,8 +26,6 @@ describe("Transferencia", () => {
       expect(response.status).to.equal(201);
     });
     it("Deve retornar status 422 após colocar um valor menor que R$10,00", async () => {
-      const token = await obterToken("julio.lima", "123456");
-
       const response = await request(process.env.BASE_URL)
         .post("/transferencias")
         .set("Content-Type", "application/json")
