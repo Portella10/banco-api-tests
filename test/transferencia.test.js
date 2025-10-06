@@ -2,6 +2,7 @@ const request = require("supertest");
 const { expect } = require("chai");
 require("dotenv").config();
 const { obterToken } = require("../helpers/autenticacao");
+const postTransferencia = require("../fixtures/postTrasferencia.json");
 
 describe("Transferencia", () => {
   describe("POST /transferencia", () => {
@@ -12,30 +13,25 @@ describe("Transferencia", () => {
     });
 
     it("Deve retornar status 200 após colocar um valor igual ou maior que R$10,00", async () => {
+      const bodyLogin = { ...postTransferencia };
+
       const response = await request(process.env.BASE_URL)
         .post("/transferencias")
         .set("Content-Type", "application/json")
         .set("Authorization", `Bearer ${token}`)
-        .send({
-          contaOrigem: 1,
-          contaDestino: 2,
-          valor: 10.0,
-          token: "",
-        });
+        .send(bodyLogin);
 
       expect(response.status).to.equal(201);
     });
     it("Deve retornar status 422 após colocar um valor menor que R$10,00", async () => {
+      const bodyLogin = { ...postTransferencia };
+      bodyLogin.valor = 9.99;
+
       const response = await request(process.env.BASE_URL)
         .post("/transferencias")
         .set("Content-Type", "application/json")
         .set("Authorization", `Bearer ${token}`)
-        .send({
-          contaOrigem: 1,
-          contaDestino: 2,
-          valor: 9.99,
-          token: "",
-        });
+        .send(bodyLogin);
 
       expect(response.status).to.equal(422);
     });
